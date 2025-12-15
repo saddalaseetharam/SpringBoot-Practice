@@ -24,19 +24,32 @@ public class StudentController {
         return studentService.getAllStudents();
     }
     @GetMapping("/{id}")
-    public StudentModel getStudentById(@PathVariable Integer id) {
-        return studentService.getStudentById(id);
+    public ResponseEntity<StudentModel> getStudentById(@PathVariable Integer id) {
+        StudentModel student = studentService.getStudentById(id);
+        if(student==null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(student);
     }
     @PostMapping
-    public StudentModel createStudent(@RequestBody StudentModel studentModel) {
-        return studentService.createStudent(studentModel);
+    public ResponseEntity<StudentModel> createStudent(@RequestBody StudentModel studentModel) {
+        StudentModel created = studentService.createStudent(studentModel);
+        return ResponseEntity.ok(created);
     }
     @PutMapping("/{id}")
-    public StudentModel updateStudent(@PathVariable Integer id, @RequestBody StudentModel studentModel) {
-        return studentService.updateStudent(id, studentModel);
+    public ResponseEntity<StudentModel> updateStudent(@PathVariable Integer id, @RequestBody StudentModel studentModel) {
+        StudentModel update = studentService.updateStudent(id, studentModel);
+        if(update==null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(update);
     }
     @DeleteMapping("/{id}")
-    public void deleteStudent(@PathVariable Integer id) {
-        studentService.deleteStudent(id);
+    public ResponseEntity<Void> deleteStudent(@PathVariable Integer id) {
+        boolean deleted = studentService.deleteStudent(id);
+        if(!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
     }
 }
